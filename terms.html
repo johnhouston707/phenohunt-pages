@@ -12,59 +12,163 @@
     header h1 { margin:0; font-size:2rem; }
     main { max-width:900px; background:var(--card); margin:2rem auto; padding:2.5rem; box-shadow:0 2px 8px rgba(0,0,0,.05); border-radius:12px; }
     h2 { color:var(--heading); border-bottom:2px solid var(--border); padding-bottom:.3rem; margin-top:2rem; }
-    h3 { color:var(--heading); margin-top:1.5rem; }
+    h3 { color:var(--heading); margin-top:1.25rem; }
     p, li { margin:.5rem 0; }
     a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
+    nav.toc { background:#f0f0f0; padding:1rem; border:1px solid var(--border); border-radius:8px; margin-bottom:2rem; }
+    nav.toc h3 { margin-top:0; }
+    nav.toc ul { list-style:none; padding-left:1rem; margin:0; columns:2; column-gap:2rem; }
+    nav.toc li { margin:.25rem 0; break-inside:avoid; }
+    .meta { margin-top:.5rem; opacity:.9; }
     footer { text-align:center; color:#666; font-size:.85rem; margin:2rem 0 3rem; }
+    .list-tight li { margin:.35rem 0; }
+    @media (max-width:700px){ main{padding:1.5rem;margin:1rem} nav.toc ul{columns:1} }
   </style>
 </head>
 <body>
   <header>
-    <h1>Terms of Service</h1>
-    <p><strong>Effective Date:</strong> October 27, 2025</p>
+    <h1>Terms of Service for Phenohunt</h1>
+    <p class="meta"><strong>Effective Date:</strong> October 27, 2025 &nbsp;•&nbsp; <strong>Last Updated:</strong> October 27, 2025</p>
   </header>
+
   <main>
-    <h2>1. Acceptance of Terms</h2>
-    <p>By accessing or using Phenohunt, you agree to these Terms of Service (“Terms”). If you do not agree, do not use the service.</p>
+    <nav class="toc" aria-label="Table of contents">
+      <h3>Table of Contents</h3>
+      <ul>
+        <li><a href="#intro">1. Introduction & Acceptance</a></li>
+        <li><a href="#service">2. Description of the Service</a></li>
+        <li><a href="#eligibility">3. Eligibility; Legal & Lawful Use</a></li>
+        <li><a href="#accounts">4. Accounts & Security</a></li>
+        <li><a href="#content">5. User Content & License</a></li>
+        <li><a href="#conduct">6. Prohibited Conduct</a></li>
+        <li><a href="#license">7. Software License</a></li>
+        <li><a href="#payments">8. Subscriptions, Payments & Trials</a></li>
+        <li><a href="#ip">9. Intellectual Property</a></li>
+        <li><a href="#thirdparty">10. Third‑Party Services</a></li>
+        <li><a href="#disclaimers">11. Disclaimers</a></li>
+        <li><a href="#liability">12. Limitation of Liability</a></li>
+        <li><a href="#indemnity">13. Indemnification</a></li>
+        <li><a href="#changes">14. Service Changes; Suspension</a></li>
+        <li><a href="#termination">15. Term & Termination</a></li>
+        <li><a href="#law">16. Governing Law & Venue</a></li>
+        <li><a href="#export">17. Export & Sanctions Compliance</a></li>
+        <li><a href="#dmca">18. IP Complaints / DMCA</a></li>
+        <li><a href="#privacy">19. Privacy Policy</a></li>
+        <li><a href="#modify-terms">20. Changes to these Terms</a></li>
+        <li><a href="#misc">21. Miscellaneous</a></li>
+        <li><a href="#contact">22. Contact</a></li>
+      </ul>
+    </nav>
 
-    <h2>2. Who We Are</h2>
-    <p>Phenohunt is provided by Soco Supply, LLC, 1535 Farmers Ln 243, Santa Rosa, CA 95405.</p>
+    <h2 id="intro">1) Introduction & Acceptance</h2>
+    <p>These Terms of Service (the “<strong>Terms</strong>”) are a legally binding agreement between you and <strong>Soco Supply, LLC</strong> (“<strong>Company</strong>,” “<strong>we</strong>,” “<strong>us</strong>,” “<strong>our</strong>”), governing your access to and use of the Phenohunt mobile application and related websites and services (collectively, the “<strong>Service</strong>”). By downloading, installing, creating an account, or using the Service, you agree to be bound by these Terms. If you do not agree, do not use the Service.</p>
 
-    <h2>3. Use of the Service</h2>
-    <ul>
-      <li>You are responsible for your account and the content you upload.</li>
-      <li>You must be of legal age to use the service in your jurisdiction (21+ in most U.S. jurisdictions).</li>
-      <li>You agree to use the service in compliance with applicable laws.</li>
+    <h2 id="service">2) Description of the Service</h2>
+    <p>Phenohunt is software for record‑keeping and educational purposes that allows users to track and manage phenohunts and cultivation‑related data, including notes, ratings, photos, and QR plant tags, and to sync such data across devices. The Service does <em>not</em> buy, sell, broker, ship, or otherwise transact in plant material or products.</p>
+
+    <h2 id="eligibility">3) Eligibility; Legal & Lawful Use</h2>
+    <ul class="list-tight">
+      <li><strong>Age.</strong> You must be at least <strong>21 years of age</strong> or the legal age in your jurisdiction, whichever is higher.</li>
+      <li><strong>Lawful Use Only.</strong> You are solely responsible for ensuring your activities comply with all applicable laws. The Service is provided for lawful record‑keeping and educational purposes only. Nothing herein constitutes encouragement or facilitation of conduct prohibited under U.S. federal law.</li>
     </ul>
 
-    <h2>4. Accounts & Security</h2>
-    <p>You must maintain the security of your login credentials and promptly notify us of any unauthorized use of your account.</p>
-
-    <h2>5. Content & Ownership</h2>
-    <p>You retain ownership of your content. You grant us a limited license to store, process, and transmit your content only as required to operate the service.</p>
-
-    <h2>6. Prohibited Conduct</h2>
-    <ul>
-      <li>No illegal content or activity.</li>
-      <li>No attempts to disrupt, reverse engineer, or overload the service.</li>
-      <li>No infringement of third-party rights.</li>
+    <h2 id="accounts">4) Accounts & Security</h2>
+    <ul class="list-tight">
+      <li>You agree to provide accurate information, maintain the confidentiality of your credentials, and promptly update account details.</li>
+      <li>You remain responsible for all activity under your account.</li>
+      <li>We may suspend or terminate access for suspected violation of these Terms, fraud, or security risks.</li>
     </ul>
 
-    <h2>7. Disclaimers</h2>
-    <p>The service is provided “as is” without warranties of any kind. We do not guarantee availability or that the service will be error-free.</p>
+    <h2 id="content">5) User Content & License</h2>
+    <ul class="list-tight">
+      <li><strong>Ownership.</strong> You retain ownership of content you create or upload (“<strong>User Content</strong>”).</li>
+      <li><strong>License to Company.</strong> You grant us a worldwide, non‑exclusive, royalty‑free license to host, store, process, display, and transmit User Content solely as necessary to provide, maintain, and improve the Service.</li>
+      <li><strong>Standards.</strong> You will not submit content that is illegal; infringes intellectual property or privacy rights; contains malware; or is false, deceptive, or harmful.</li>
+      <li><strong>Backups.</strong> You are responsible for maintaining independent backups of your data.</li>
+    </ul>
 
-    <h2>8. Limitation of Liability</h2>
-    <p>To the maximum extent permitted by law, Soco Supply, LLC shall not be liable for indirect, incidental, special, consequential, or punitive damages.</p>
+    <h2 id="conduct">6) Prohibited Conduct</h2>
+    <ul class="list-tight">
+      <li>Using the Service for unlawful purposes, including activity prohibited by federal, state, or local law;</li>
+      <li>Attempting to access accounts or data without authorization, or interfering with Service operation;</li>
+      <li>Reverse engineering, decompiling, scraping, or circumventing security features;</li>
+      <li>Uploading harmful code or content that infringes third‑party rights.</li>
+    </ul>
 
-    <h2>9. Termination</h2>
-    <p>We may suspend or terminate access for any violation of these Terms or to comply with legal obligations.</p>
+    <h2 id="license">7) Software License</h2>
+    <p>Subject to these Terms, we grant you a limited, revocable, non‑exclusive, non‑transferable, non‑sublicensable license to install and use the App on devices you own or control, for personal, non‑commercial use.</p>
 
-    <h2>10. Changes</h2>
-    <p>We may update these Terms. Continued use after updates constitutes acceptance of the revised Terms.</p>
+    <h2 id="payments">8) Subscriptions, Payments & Trials</h2>
+    <ul class="list-tight">
+      <li><strong>In‑App Purchases.</strong> Purchases made through the Apple App Store are processed by Apple under their terms and policies. Billing, renewals, refunds, and cancellations for such purchases are handled by Apple. We do not control App Store payment processing.</li>
+      <li><strong>Web Purchases (future support).</strong> If we later offer web subscriptions or purchases through a third‑party processor (e.g., Stripe), those transactions will be processed by that provider under its terms. Taxes may apply.</li>
+      <li><strong>Auto‑Renewal.</strong> Subscriptions, if offered, automatically renew until you cancel. You can cancel at any time in your App Store account settings (for App Store purchases) or via the web portal (for web purchases) before the renewal date to avoid future charges.</li>
+      <li><strong>Changes.</strong> We may change pricing with reasonable advance notice where required by law or platform policy.</li>
+      <li><strong>No unlawful payments.</strong> You may not use the Service in connection with any transaction that violates applicable law.</li>
+    </ul>
 
-    <h2>11. Contact</h2>
-    <p>Questions? Email <a href="mailto:support@phenohunt.com">support@phenohunt.com</a>.</p>
+    <h2 id="ip">9) Intellectual Property</h2>
+    <ul class="list-tight">
+      <li>Excluding User Content, the Service and all related software, designs, text, graphics, logos, and trademarks are owned by the Company or its licensors and are protected by law.</li>
+      <li>You acquire no rights except the limited license expressly granted here.</li>
+    </ul>
+
+    <h2 id="thirdparty">10) Third‑Party Services</h2>
+    <p>The Service may integrate with third‑party services (e.g., authentication, storage, analytics). Your use of those services is governed by their terms and privacy policies. We are not responsible for third‑party services.</p>
+
+    <h2 id="disclaimers">11) Disclaimers</h2>
+    <ul class="list-tight">
+      <li><strong>No Advice.</strong> The Service is for record‑keeping and educational purposes only and does not constitute advice or a guarantee of outcomes.</li>
+      <li><strong>Availability.</strong> The Service may be unavailable, interrupted, or experience data loss; we do not guarantee that content will be preserved without loss or corruption.</li>
+      <li><strong>“AS IS”.</strong> TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SERVICE IS PROVIDED “AS IS” AND “AS AVAILABLE,” WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON‑INFRINGEMENT.</li>
+    </ul>
+
+    <h2 id="liability">12) Limitation of Liability</h2>
+    <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL THE COMPANY BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES (INCLUDING LOST PROFITS, LOST DATA, LOSS OF GOODWILL, OR CROP FAILURE), ARISING FROM OR RELATING TO YOUR USE OF THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. OUR TOTAL LIABILITY FOR ANY CLAIM SHALL NOT EXCEED THE AMOUNTS YOU PAID TO US FOR THE SERVICE IN THE TWELVE (12) MONTHS PRECEDING THE EVENT GIVING RISE TO THE CLAIM.</p>
+
+    <h2 id="indemnity">13) Indemnification</h2>
+    <p>You will defend, indemnify, and hold harmless the Company and its officers, directors, employees, and agents from and against any claims, damages, liabilities, losses, and expenses (including reasonable attorneys’ fees) arising out of or related to your use of the Service, your User Content, or your violation of these Terms or applicable law.</p>
+
+    <h2 id="changes">14) Service Changes; Suspension</h2>
+    <p>We may modify or discontinue all or part of the Service, or suspend or restrict access, at any time where necessary for security, legal, or operational reasons. If we discontinue a paid feature, we will provide appropriate notice and, where applicable, a prorated refund consistent with platform policies.</p>
+
+    <h2 id="termination">15) Term & Termination</h2>
+    <ul class="list-tight">
+      <li>You may stop using the Service and delete your account at any time via in‑app settings.</li>
+      <li>We may suspend or terminate your access immediately for suspected violations of these Terms, unlawful conduct, or to protect the Service or other users.</li>
+      <li>Upon termination, your right to use the Service ceases. Sections intended to survive (including §§ 5, 6, 8–13, 16–21) will remain in effect.</li>
+    </ul>
+
+    <h2 id="law">16) Governing Law & Venue</h2>
+    <p>These Terms and any dispute or claim arising out of or relating to them or the Service are governed by the laws of the State of <strong>California</strong>, without regard to conflicts‑of‑law rules. The parties consent to the <strong>exclusive jurisdiction and venue of the state and federal courts located in Sonoma County, California</strong>.</p>
+
+    <h2 id="export">17) Export & Sanctions Compliance</h2>
+    <p>You represent that you are not located in, under the control of, or a national or resident of any country or person on any U.S. government sanctions list. You agree to comply with all applicable export control and sanctions laws.</p>
+
+    <h2 id="dmca">18) IP Complaints / DMCA</h2>
+    <p>If you believe content available through the Service infringes your intellectual‑property rights, contact <a href="mailto:support@phenohunt.com">support@phenohunt.com</a> with: (a) identification of the work claimed to be infringed; (b) identification of the material claimed to be infringing; (c) your contact information; and (d) a statement that you have a good‑faith belief the use is not authorized and that the information provided is accurate.</p>
+
+    <h2 id="privacy">19) Privacy Policy</h2>
+    <p>Your use of the Service is subject to our <a href="https://app.phenohunt.com/privacy">Privacy Policy</a>, which is incorporated by reference.</p>
+
+    <h2 id="modify-terms">20) Changes to these Terms</h2>
+    <p>We may update these Terms from time to time. If changes are material, we will provide notice (e.g., in‑app or by email). Your continued use of the Service after changes take effect constitutes acceptance of the updated Terms.</p>
+
+    <h2 id="misc">21) Miscellaneous</h2>
+    <ul class="list-tight">
+      <li><strong>Entire Agreement.</strong> These Terms, together with the Privacy Policy, are the entire agreement between you and the Company regarding the Service.</li>
+      <li><strong>Severability.</strong> If any provision is held unenforceable, the remaining provisions will remain in effect.</li>
+      <li><strong>Assignment.</strong> You may not assign these Terms without our prior written consent. We may assign these Terms in connection with a merger, acquisition, or sale of assets.</li>
+      <li><strong>Waiver.</strong> Failure to enforce any provision is not a waiver of future enforcement.</li>
+      <li><strong>Electronic Communications.</strong> You consent to receive communications electronically, and agree that all terms and notices provided electronically satisfy legal requirements.</li>
+    </ul>
+
+    <h2 id="contact">22) Contact</h2>
+    <p><strong>Soco Supply, LLC (Phenohunt)</strong><br/>
+       1535 Farmers Ln #243, Santa Rosa, CA 95405<br/>
+       Email: <a href="mailto:support@phenohunt.com">support@phenohunt.com</a></p>
   </main>
+
   <footer>
     &copy; 2025 Soco Supply, LLC. All rights reserved. |
     <a href="/privacy">Privacy Policy</a>
