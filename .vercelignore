@@ -1,0 +1,39 @@
+# Ignore development and metadata files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+*.swp
+*.orig
+
+# Ignore version control folders
+.git
+.gitignore
+.gitattributes
+
+# Ignore project notes and docs not used in deployment
+README.md
+*.md
+*.txt
+
+# Ignore editor / environment settings
+.vscode/
+.idea/
+*.code-workspace
+
+# Ignore any local testing or staging files
+test/
+tests/
+sandbox/
+archive/
+drafts/
+notes/
+
+# Ignore macOS system files
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
