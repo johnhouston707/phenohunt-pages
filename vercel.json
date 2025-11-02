@@ -1,7 +1,8 @@
 {
   "version": 2,
   "routes": [
-    { "src": "^/$", "dest": "/privacy.html" },
+    { "src": "^/$", "dest": "/support.html" },
+    { "src": "^/support$", "dest": "/support.html" },
     { "src": "^/privacy$", "dest": "/privacy.html" },
     { "src": "^/terms$", "dest": "/terms.html" }
   ]
