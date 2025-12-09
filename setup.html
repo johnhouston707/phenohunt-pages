@@ -138,7 +138,12 @@
     <script>
         async function loadManifest() {
             const urlParams = new URLSearchParams(window.location.search);
-            const manifestUrl = urlParams.get('manifest');
+            
+            // Check for short ID format (?id=SHORTID) or full URL format (?manifest=URL)
+            const shortId = urlParams.get('id');
+            const manifestUrl = shortId 
+                ? `https://data.phenohunt.com/storage/v1/object/public/phenohunt-photos/manifests/${shortId}.json`
+                : urlParams.get('manifest');
             
             const loading = document.getElementById('loading');
             const error = document.getElementById('error');
