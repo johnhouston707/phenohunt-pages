@@ -1,0 +1,12 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "5XK36B7MFC.com.johnhouston.phenohunt",
+                "paths": ["/setup", "/setup/*"]
+            }
+        ]
+    }
+}
+
