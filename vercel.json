@@ -7,6 +7,7 @@
     { "src": "^/terms$", "dest": "/terms.html" },
     { "src": "^/setup$", "dest": "/setup.html" },
     { "src": "^/s/.*$", "dest": "/s.html" },
+    { "src": "^/p$", "dest": "/p.html" },
     {
       "src": "^/.well-known/apple-app-site-association$",
       "dest": "/.well-known/apple-app-site-association",
