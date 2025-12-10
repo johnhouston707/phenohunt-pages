@@ -141,14 +141,8 @@
     </div>
     
     <script>
-        async function loadManifest() {
+        async function loadContent() {
             const urlParams = new URLSearchParams(window.location.search);
-            
-            // Check for short ID format (?id=SHORTID) or full URL format (?manifest=URL)
-            const shortId = urlParams.get('id');
-            const manifestUrl = shortId 
-                ? `https://data.phenohunt.com/storage/v1/object/public/phenohunt-photos/manifests/${shortId}.json`
-                : urlParams.get('manifest');
             
             const loading = document.getElementById('loading');
             const error = document.getElementById('error');
@@ -156,6 +150,36 @@
             const downloadBtn = document.getElementById('download-btn');
             const instructions = document.getElementById('instructions');
             const subtitle = document.getElementById('subtitle');
+            
+            // Check if this is a PHENO link (?p=SHORTID) - plant tag scan
+            const phenoId = urlParams.get('p');
+            if (phenoId) {
+                // Show pheno/plant tag content
+                document.querySelector('h1').textContent = 'Open in Phenohunt';
+                subtitle.textContent = 'Plant Tag Scanned';
+                
+                // Replace the details card with pheno message
+                detailsCard.innerHTML = `
+                    <p style="color: #d1d5db; line-height: 1.6;">
+                        This QR code links to a plant in the Phenohunt app. 
+                        Download the app to track and manage your phenotype hunting projects.
+                    </p>
+                `;
+                
+                instructions.textContent = 'After installing the app, scan this QR code again to open the plant directly and add a new record.';
+                
+                loading.style.display = 'none';
+                detailsCard.style.display = 'block';
+                downloadBtn.style.display = 'inline-block';
+                instructions.style.display = 'block';
+                return;
+            }
+            
+            // Check for short ID format (?id=SHORTID) or full URL format (?manifest=URL)
+            const shortId = urlParams.get('id');
+            const manifestUrl = shortId 
+                ? `https://data.phenohunt.com/storage/v1/object/public/phenohunt-photos/manifests/${shortId}.json`
+                : urlParams.get('manifest');
             
             if (!manifestUrl) {
                 loading.style.display = 'none';
@@ -192,7 +216,7 @@
             }
         }
         
-        loadManifest();
+        loadContent();
     </script>
 </body>
 </html>
