@@ -3,7 +3,14 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { createBrowserClient } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
+
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 
 function LoginForm() {
   const router = useRouter();
@@ -22,7 +29,7 @@ function LoginForm() {
     setIsLoading(true);
 
     try {
-      const supabase = createBrowserClient();
+      const supabase = getSupabase();
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       
       if (error) throw error;
@@ -39,7 +46,7 @@ function LoginForm() {
     setIsOAuthLoading(provider);
 
     try {
-      const supabase = createBrowserClient();
+      const supabase = getSupabase();
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {

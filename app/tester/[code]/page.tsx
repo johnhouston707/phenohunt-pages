@@ -1,7 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { supabase, TesterTag, TesterFeedback } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
+import { TesterTag, TesterFeedback } from "@/lib/supabase";
+
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 
 const styles = `
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -76,6 +84,7 @@ export default function TesterPage() {
 
   useEffect(() => {
     async function load() {
+      const supabase = getSupabase();
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         router.push(`/login?redirect=/tester/${code}`);
@@ -122,6 +131,7 @@ export default function TesterPage() {
     if (!tag || !userId) return;
     setIsSaving(true);
 
+    const supabase = getSupabase();
     const data = {
       overall_rating: overallRating || null,
       potency_rating: potencyRating || null,
@@ -215,4 +225,3 @@ export default function TesterPage() {
     </>
   );
 }
-

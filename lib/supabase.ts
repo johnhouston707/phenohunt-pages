@@ -1,9 +1,31 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Only create client on the client side or when env vars are available
+function getSupabaseClient(): SupabaseClient | null {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null;
+  }
+  
+  return createClient(supabaseUrl, supabaseAnonKey);
+}
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Default client (for backwards compatibility)
+export const supabase = getSupabaseClient();
+
+// Browser client factory (for use in client components)
+export function createBrowserClient(): SupabaseClient {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase environment variables are not configured');
+  }
+  
+  return createClient(supabaseUrl, supabaseAnonKey);
+}
 
 export interface TesterTag {
   id: string;
@@ -29,5 +51,6 @@ export interface TesterFeedback {
   color_rating: number | null;
   review_notes: string | null;
   tester_display_name: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
-
