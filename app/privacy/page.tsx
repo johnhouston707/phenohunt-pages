@@ -1,10 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import { redirect } from 'next/navigation';
 
 export default function PrivacyPage() {
-  const htmlPath = path.join(process.cwd(), 'privacy.html');
-  const htmlContent = fs.readFileSync(htmlPath, 'utf8');
-  
-  return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+  redirect('/privacy.html');
 }
-

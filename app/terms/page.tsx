@@ -1,10 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import { redirect } from 'next/navigation';
 
 export default function TermsPage() {
-  const htmlPath = path.join(process.cwd(), 'terms.html');
-  const htmlContent = fs.readFileSync(htmlPath, 'utf8');
-  
-  return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+  redirect('/terms.html');
 }
-

@@ -1,10 +1,15 @@
-import fs from 'fs';
-import path from 'path';
+"use client";
+import { useParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function ShortUrlPage() {
-  const htmlPath = path.join(process.cwd(), 's.html');
-  const htmlContent = fs.readFileSync(htmlPath, 'utf8');
+  const params = useParams();
+  const shortId = params.shortId as string;
   
-  return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+  useEffect(() => {
+    // Redirect to the static HTML with the path preserved
+    window.location.href = `/s.html`;
+  }, [shortId]);
+  
+  return <div style={{ background: '#1a1a2e', minHeight: '100vh', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
 }
-

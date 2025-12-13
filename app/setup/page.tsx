@@ -1,10 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import { redirect } from 'next/navigation';
 
 export default function SetupPage() {
-  const htmlPath = path.join(process.cwd(), 'setup.html');
-  const htmlContent = fs.readFileSync(htmlPath, 'utf8');
-  
-  return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+  redirect('/setup.html');
 }
-
