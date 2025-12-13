@@ -19,6 +19,12 @@ function ProfilePhoto({ ownerId, phenoId }: { ownerId: string; phenoId: string }
   // Photos are stored in pheno-photos bucket with uppercase UUIDs
   const photoUrl = `https://data.phenohunt.com/storage/v1/object/public/pheno-photos/${ownerId.toUpperCase()}/${phenoId.toUpperCase()}/ProfilePic/profile.jpg`;
   
+  // Debug logging
+  console.log("[ProfilePhoto] ownerId:", ownerId);
+  console.log("[ProfilePhoto] phenoId:", phenoId);
+  console.log("[ProfilePhoto] photoUrl:", photoUrl);
+  console.log("[ProfilePhoto] loaded:", loaded, "error:", error);
+  
   // Don't render anything if there was an error loading or still loading
   if (error || !loaded) {
     return (
@@ -27,10 +33,19 @@ function ProfilePhoto({ ownerId, phenoId }: { ownerId: string; phenoId: string }
         <img
           src={photoUrl}
           alt=""
-          onLoad={() => setLoaded(true)}
-          onError={() => setError(true)}
+          onLoad={() => {
+            console.log("[ProfilePhoto] Image loaded successfully!");
+            setLoaded(true);
+          }}
+          onError={(e) => {
+            console.log("[ProfilePhoto] Image load error:", e);
+            console.log("[ProfilePhoto] Failed URL:", photoUrl);
+            setError(true);
+          }}
           style={{ display: "none" }}
         />
+        {/* Debug: show the URL being attempted */}
+        <div style={{ display: "none" }} data-debug-url={photoUrl} />
       </>
     );
   }
