@@ -53,4 +53,22 @@ export interface TesterFeedback {
   tester_display_name: string | null;
   created_at?: string;
   updated_at?: string;
+  // Terpene fields
+  overall_strength_pct?: number | null;
+  nose_gas_pct?: number | null;
+  nose_floral_pct?: number | null;
+  nose_earthy_pct?: number | null;
+  nose_fruity_pct?: number | null;
+  nose_chem_pct?: number | null;
+  nose_grapes_pct?: number | null;
+  nose_candy_pct?: number | null;
+  nose_lemons_pct?: number | null;
+  nose_lime_pct?: number | null;
+  nose_tangie_pct?: number | null;
+  nose_peaches_pct?: number | null;
+  nose_skunk_pct?: number | null;
+  nose_jack_pct?: number | null;
+  nose_pine_pct?: number | null;
+  // Color
+  selected_color?: string | null;
 }
