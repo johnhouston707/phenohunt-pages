@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, createContext, useContext } from "react";
+import { usePathname } from "next/navigation";
 
 const APP_STORE_URL = "https://apps.apple.com/us/app/phenohunt/id6754624180";
 const BANNER_HEIGHT = 61; // px
@@ -37,6 +38,7 @@ export function BannerProvider({ children }: { children: React.ReactNode }) {
 export default function AppDownloadBanner() {
   const [show, setShow] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     // Only show on iOS devices
@@ -57,11 +59,47 @@ export default function AppDownloadBanner() {
   };
 
   const handleOpenApp = () => {
-    // Since we can't reliably detect if app is installed from browser,
-    // and universal links don't work when clicking from within Safari,
-    // just go directly to the App Store. Users with the app can scan
-    // the QR code again to open it properly.
-    window.location.href = APP_STORE_URL;
+    // Try to open via custom URL scheme first
+    // Extract the path to construct phenohunt:// URL
+    // e.g., /tester/TSTR-ABCD1234 -> phenohunt://tester/TSTR-ABCD1234
+    const customSchemeUrl = `phenohunt:/${pathname}`;
+    
+    // Record the time before attempting to open
+    const startTime = Date.now();
+    
+    // Create a hidden iframe to attempt opening the custom URL scheme
+    // This avoids the "Cannot Open Page" error that direct navigation causes
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = customSchemeUrl;
+    document.body.appendChild(iframe);
+    
+    // After a short delay, check if we're still here
+    // If the app opened, the page will be in the background
+    // If not, redirect to App Store
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+      
+      // If more than 1.5 seconds passed and we're still on the page,
+      // the app probably isn't installed
+      if (document.visibilityState !== 'hidden') {
+        window.location.href = APP_STORE_URL;
+      }
+    }, 1500);
+    
+    // Also listen for visibility change - if page becomes hidden, app opened
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        // App opened successfully, clean up
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Clean up listener after timeout regardless
+    setTimeout(() => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }, 2000);
   };
 
   if (!show || dismissed) return null;
@@ -91,7 +129,7 @@ export default function AppDownloadBanner() {
         />
         <div style={{ minWidth: 0 }}>
           <div style={{ color: '#fff', fontWeight: 600, fontSize: 14 }}>Phenohunt</div>
-          <div style={{ color: '#9ca3af', fontSize: 12 }}>Get the full experience</div>
+          <div style={{ color: '#9ca3af', fontSize: 12 }}>Open in the app</div>
         </div>
       </div>
       
@@ -110,7 +148,7 @@ export default function AppDownloadBanner() {
             cursor: 'pointer',
           }}
         >
-          Get the App
+          Open
         </button>
         <button
           onClick={handleDismiss}
