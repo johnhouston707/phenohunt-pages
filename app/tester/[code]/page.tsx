@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { TesterTag, TesterFeedback } from "@/lib/supabase";
 import TesterFeedbackForm from "@/components/TesterFeedbackForm";
@@ -22,10 +22,12 @@ const styles = `
   .loading { text-align: center; padding: 48px; color: #9ca3af; }
 `;
 
-export default function TesterPage() {
+function TesterPageContent() {
   const params = useParams();
   const router = useRouter();
-  const code = params.code as string;
+  const searchParams = useSearchParams();
+  const testerCode = params.code as string;
+  const authCode = searchParams.get('code'); // OAuth code from callback
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,9 +39,26 @@ export default function TesterPage() {
   useEffect(() => {
     async function load() {
       const supabase = getSupabase();
+      
+      // If we have an auth code from OAuth callback, exchange it for session
+      if (authCode) {
+        try {
+          const { error: authError } = await supabase.auth.exchangeCodeForSession(authCode);
+          if (authError) {
+            console.error('Failed to exchange code:', authError);
+          }
+          // Remove the code from URL to prevent re-exchange
+          const newUrl = window.location.pathname;
+          window.history.replaceState({}, '', newUrl);
+        } catch (e) {
+          console.error('Auth code exchange error:', e);
+        }
+      }
+      
+      // Check for session
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        router.push(`/login?redirect=/tester/${code}`);
+        router.push(`/login?redirect=/tester/${testerCode}`);
         return;
       }
       setUserId(session.user.id);
@@ -49,7 +68,7 @@ export default function TesterPage() {
       setDisplayName(profile?.display_name || session.user.email || "Anonymous");
 
       // Get tag
-      const { data: tags, error: tagErr } = await supabase.from("tester_tags").select("*").eq("code", code).limit(1);
+      const { data: tags, error: tagErr } = await supabase.from("tester_tags").select("*").eq("code", testerCode).limit(1);
       if (tagErr || !tags?.length) {
         setError("Tester tag not found");
         setIsLoading(false);
@@ -66,7 +85,7 @@ export default function TesterPage() {
       setIsLoading(false);
     }
     load();
-  }, [code, router]);
+  }, [testerCode, authCode, router]);
 
   if (isLoading) {
     return (
@@ -99,5 +118,18 @@ export default function TesterPage() {
         />
       </div>
     </>
+  );
+}
+
+export default function TesterPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <style dangerouslySetInnerHTML={{ __html: styles }} />
+        <div className="loading">Loading...</div>
+      </>
+    }>
+      <TesterPageContent />
+    </Suspense>
   );
 }
