@@ -10,6 +10,45 @@ interface Props {
   displayName: string;
 }
 
+// Profile photo component that handles loading and errors gracefully
+function ProfilePhoto({ ownerId, phenoId }: { ownerId: string; phenoId: string }) {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+  
+  // Construct URL from owner_id and pheno_id
+  const photoUrl = `https://data.phenohunt.com/storage/v1/object/public/phenohunt-photos/PhenoProfilePhotos/${ownerId}/${phenoId}/ProfilePic/profile.jpg`;
+  
+  // Don't render anything if there was an error loading
+  if (error) return null;
+  
+  return (
+    <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+      <img
+        src={photoUrl}
+        alt="Pheno"
+        onLoad={() => setLoaded(true)}
+        onError={() => setError(true)}
+        style={{
+          width: 120,
+          height: 120,
+          borderRadius: "50%",
+          objectFit: "cover",
+          border: "1px solid rgba(255,255,255,0.2)",
+          display: loaded ? "block" : "none",
+        }}
+      />
+      {!loaded && !error && (
+        <div style={{
+          width: 120,
+          height: 120,
+          borderRadius: "50%",
+          background: "rgba(255,255,255,0.1)",
+        }} />
+      )}
+    </div>
+  );
+}
+
 // Color options matching iOS ColorTrait enum
 const colorOptions = [
   { value: "purple", label: "Light Purple", color: "#A855F7" },
@@ -196,25 +235,11 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
     <form onSubmit={handleSubmit}>
       {/* Summary Card */}
       <div style={{ ...cardStyle, padding: 16 }}>
-        {/* Profile Photo */}
-        {tag.profile_photo_url && (
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-            <img
-              src={tag.profile_photo_url}
-              alt="Pheno"
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: "1px solid rgba(255,255,255,0.2)",
-              }}
-            />
-          </div>
-        )}
-        <h2 style={{ fontWeight: 700, fontSize: 18, color: "#fff", margin: 0, textAlign: tag.profile_photo_url ? "center" : "left" }}>{tag.strain_name || "Unknown Strain"}</h2>
+        {/* Profile Photo - constructed from owner_id and pheno_id */}
+        <ProfilePhoto ownerId={tag.owner_id} phenoId={tag.pheno_id} />
+        <h2 style={{ fontWeight: 700, fontSize: 18, color: "#fff", margin: 0, textAlign: "center" }}>{tag.strain_name || "Unknown Strain"}</h2>
         {tag.pheno_number && (
-          <p style={{ color: "#9ca3af", fontSize: 14, marginTop: 4, textAlign: tag.profile_photo_url ? "center" : "left" }}>PHENO-{String(tag.pheno_number).padStart(4, "0")}</p>
+          <p style={{ color: "#9ca3af", fontSize: 14, marginTop: 4, textAlign: "center" }}>PHENO-{String(tag.pheno_number).padStart(4, "0")}</p>
         )}
         {overallRating > 0 && (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 12, paddingTop: 12, borderTop: "1px solid #38383A" }}>
