@@ -18,33 +18,35 @@ function ProfilePhoto({ ownerId, phenoId }: { ownerId: string; phenoId: string }
   // Construct URL from owner_id and pheno_id
   const photoUrl = `https://data.phenohunt.com/storage/v1/object/public/phenohunt-photos/PhenoProfilePhotos/${ownerId}/${phenoId}/ProfilePic/profile.jpg`;
   
-  // Don't render anything if there was an error loading
-  if (error) return null;
+  // Don't render anything if there was an error loading or still loading
+  if (error || !loaded) {
+    return (
+      <>
+        {/* Hidden image to trigger load/error events */}
+        <img
+          src={photoUrl}
+          alt=""
+          onLoad={() => setLoaded(true)}
+          onError={() => setError(true)}
+          style={{ display: "none" }}
+        />
+      </>
+    );
+  }
   
   return (
     <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
       <img
         src={photoUrl}
         alt="Pheno"
-        onLoad={() => setLoaded(true)}
-        onError={() => setError(true)}
         style={{
           width: 120,
           height: 120,
           borderRadius: "50%",
           objectFit: "cover",
           border: "1px solid rgba(255,255,255,0.2)",
-          display: loaded ? "block" : "none",
         }}
       />
-      {!loaded && !error && (
-        <div style={{
-          width: 120,
-          height: 120,
-          borderRadius: "50%",
-          background: "rgba(255,255,255,0.1)",
-        }} />
-      )}
     </div>
   );
 }
