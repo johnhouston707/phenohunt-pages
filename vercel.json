@@ -1,19 +1,11 @@
 {
-  "version": 2,
-  "routes": [
-    { "src": "^/$", "dest": "/support.html" },
-    { "src": "^/support$", "dest": "/support.html" },
-    { "src": "^/privacy$", "dest": "/privacy.html" },
-    { "src": "^/terms$", "dest": "/terms.html" },
-    { "src": "^/setup$", "dest": "/setup.html" },
-    { "src": "^/s/.*$", "dest": "/s.html" },
-    { "src": "^/p$", "dest": "/p.html" },
+  "framework": "nextjs",
+  "headers": [
     {
-      "src": "^/.well-known/apple-app-site-association$",
-      "dest": "/.well-known/apple-app-site-association",
-      "headers": {
-        "Content-Type": "application/json"
-      }
+      "source": "/.well-known/apple-app-site-association",
+      "headers": [
+        { "key": "Content-Type", "value": "application/json" }
+      ]
     }
   ]
 }

@@ -4,9 +4,8 @@
         "details": [
             {
                 "appID": "5XK36B7MFC.com.johnhouston.phenohunt",
-                "paths": ["/setup", "/setup/*", "/s/*", "/p", "/p/*"]
+                "paths": ["/setup", "/setup/*", "/s/*", "/p", "/p/*", "/tester/*"]
             }
         ]
     }
 }
-
