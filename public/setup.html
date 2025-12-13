@@ -141,6 +141,19 @@
     </div>
     
     <script>
+        const APP_STORE_URL = 'https://apps.apple.com/us/app/phenohunt/id6754624180';
+        
+        // Check if running on iOS
+        function isIOS() {
+            const ua = window.navigator.userAgent;
+            return /iPhone|iPad|iPod/.test(ua) && !window.MSStream;
+        }
+        
+        // Auto-redirect to App Store on iOS
+        if (isIOS()) {
+            window.location.href = APP_STORE_URL;
+        }
+        
         async function loadContent() {
             const urlParams = new URLSearchParams(window.location.search);
             
