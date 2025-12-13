@@ -20,10 +20,10 @@ function ProfilePhoto({ ownerId, phenoId }: { ownerId: string; phenoId: string }
   const photoUrl = `https://data.phenohunt.com/storage/v1/object/public/pheno-photos/${ownerId.toUpperCase()}/${phenoId.toUpperCase()}/ProfilePic/profile.jpg`;
   
   // Debug logging
-  console.log("[ProfilePhoto] ownerId:", ownerId);
-  console.log("[ProfilePhoto] phenoId:", phenoId);
-  console.log("[ProfilePhoto] photoUrl:", photoUrl);
-  console.log("[ProfilePhoto] loaded:", loaded, "error:", error);
+  console.log("[tester-photo] ownerId:", ownerId);
+  console.log("[tester-photo] phenoId:", phenoId);
+  console.log("[tester-photo] photoUrl:", photoUrl);
+  console.log("[tester-photo] loaded:", loaded, "error:", error);
   
   // Don't render anything if there was an error loading or still loading
   if (error || !loaded) {
@@ -34,12 +34,12 @@ function ProfilePhoto({ ownerId, phenoId }: { ownerId: string; phenoId: string }
           src={photoUrl}
           alt=""
           onLoad={() => {
-            console.log("[ProfilePhoto] Image loaded successfully!");
+            console.log("[tester-photo] Image loaded successfully!");
             setLoaded(true);
           }}
           onError={(e) => {
-            console.log("[ProfilePhoto] Image load error:", e);
-            console.log("[ProfilePhoto] Failed URL:", photoUrl);
+            console.log("[tester-photo] Image load error:", e);
+            console.log("[tester-photo] Failed URL:", photoUrl);
             setError(true);
           }}
           style={{ display: "none" }}
