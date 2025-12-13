@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, createContext, useContext } from "react";
-import { usePathname } from "next/navigation";
 
 const APP_STORE_URL = "https://apps.apple.com/us/app/phenohunt/id6754624180";
 const BANNER_HEIGHT = 61; // px
@@ -38,7 +37,6 @@ export function BannerProvider({ children }: { children: React.ReactNode }) {
 export default function AppDownloadBanner() {
   const [show, setShow] = useState(false);
   const [dismissed, setDismissed] = useState(false);
-  const pathname = usePathname();
 
   useEffect(() => {
     // Only show on iOS devices
@@ -55,31 +53,15 @@ export default function AppDownloadBanner() {
     setDismissed(true);
     setShow(false);
     sessionStorage.setItem('app-banner-dismissed', 'true');
-    // Trigger re-render for padding
     window.dispatchEvent(new Event('banner-dismissed'));
   };
 
-  const handleOpenApp = (e: React.MouseEvent) => {
-    e.preventDefault();
-    
-    // Build the universal link for the current page
-    // This will open the app if installed, otherwise stay on web
-    const universalLink = `https://app.phenohunt.com${pathname}`;
-    
-    // Try to open via universal link first
-    // Set a timeout - if still here after 1.5s, redirect to App Store
-    const now = Date.now();
-    
-    // Try opening the universal link
-    window.location.href = universalLink;
-    
-    // If still here after delay, user doesn't have the app - go to App Store
-    setTimeout(() => {
-      // Only redirect if we're still on this page (app didn't open)
-      if (Date.now() - now < 2000) {
-        window.location.href = APP_STORE_URL;
-      }
-    }, 1500);
+  const handleOpenApp = () => {
+    // Since we can't reliably detect if app is installed from browser,
+    // and universal links don't work when clicking from within Safari,
+    // just go directly to the App Store. Users with the app can scan
+    // the QR code again to open it properly.
+    window.location.href = APP_STORE_URL;
   };
 
   if (!show || dismissed) return null;
@@ -128,7 +110,7 @@ export default function AppDownloadBanner() {
             cursor: 'pointer',
           }}
         >
-          Open in App
+          Get the App
         </button>
         <button
           onClick={handleDismiss}
