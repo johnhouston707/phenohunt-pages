@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import StarRating from "./StarRating";
 import { createBrowserClient, TesterTag, TesterFeedback } from "@/lib/supabase";
 
 interface Props {
@@ -14,13 +13,16 @@ interface Props {
 // Color options matching iOS ColorTrait enum
 const colorOptions = [
   { value: "purple", label: "Light Purple", color: "#A855F7" },
-  { value: "darkPurple", label: "Dark Purple", color: "#3B0054" },
-  { value: "forest", label: "Forest Green", color: "#006600" },
+  { value: "darkPurple", label: "Dark Purple", color: "#581C87" },
+  { value: "forest", label: "Forest Green", color: "#166534" },
   { value: "lime", label: "Lime Green", color: "#22C55E" },
 ];
 
 // Terpene names
 const terpeneNames = ["Gas", "Floral", "Earthy", "Fruity", "Chem", "Grapes", "Candy", "Lemons", "Lime", "Tangie", "Peaches", "Skunk", "Jack", "Pine"];
+
+// Teal color for stars
+const TEAL = "#00A699";
 
 export default function TesterFeedbackForm({ tag, existingFeedback, userId, displayName }: Props) {
   // Ratings
@@ -99,7 +101,6 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
       color_rating: colorRating || null,
       review_notes: reviewNotes || null,
       tester_display_name: displayName,
-      // Terpene data
       overall_strength_pct: overallStrength,
       nose_gas_pct: terpeneValues.Gas,
       nose_floral_pct: terpeneValues.Floral,
@@ -115,7 +116,6 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
       nose_skunk_pct: terpeneValues.Skunk,
       nose_jack_pct: terpeneValues.Jack,
       nose_pine_pct: terpeneValues.Pine,
-      // Color
       selected_color: selectedColor || null,
     };
 
@@ -140,34 +140,72 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
     }
   };
 
+  // Star rating component
+  const StarRating = ({ value, onChange, label, starColor = TEAL }: { value: number; onChange: (v: number) => void; label: string; starColor?: string }) => (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", minHeight: 44 }}>
+      {label && <span style={{ fontWeight: 600, color: "#fff" }}>{label}</span>}
+      <div style={{ display: "flex", gap: 4 }}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            type="button"
+            onClick={() => onChange(star)}
+            style={{ 
+              background: "none", 
+              border: "none", 
+              fontSize: 20, 
+              cursor: "pointer",
+              color: star <= value ? starColor : "rgba(255,255,255,0.2)",
+              padding: 0,
+            }}
+          >
+            ★
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
   if (saved) {
     return (
-      <div className="text-center py-12">
-        <div className="w-16 h-16 bg-[#00A699] rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-          </svg>
+      <div style={{ textAlign: "center", padding: 48 }}>
+        <div style={{ width: 64, height: 64, background: TEAL, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+          <span style={{ fontSize: 32, color: "#fff" }}>✓</span>
         </div>
-        <h2 className="text-xl font-bold mb-2 text-white">Thank You!</h2>
-        <p className="text-gray-400">Your feedback has been saved.</p>
+        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8, color: "#fff" }}>Thank You!</h2>
+        <p style={{ color: "#9ca3af" }}>Your feedback has been saved.</p>
       </div>
     );
   }
 
+  const cardStyle: React.CSSProperties = {
+    background: "#1C1C1E",
+    borderRadius: 12,
+    border: "1px solid #38383A",
+    marginBottom: 16,
+    overflow: "hidden",
+  };
+
+  const dividerStyle: React.CSSProperties = {
+    height: 1,
+    background: "#38383A",
+    marginLeft: 16,
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit}>
       {/* Summary Card */}
-      <div className="bg-[#1C1C1E] rounded-xl p-4 border border-[#38383A] shadow-sm">
-        <h2 className="font-bold text-lg text-white">{tag.strain_name || "Unknown Strain"}</h2>
+      <div style={{ ...cardStyle, padding: 16 }}>
+        <h2 style={{ fontWeight: 700, fontSize: 18, color: "#fff", margin: 0 }}>{tag.strain_name || "Unknown Strain"}</h2>
         {tag.pheno_number && (
-          <p className="text-gray-400 text-sm mt-1">PHENO-{String(tag.pheno_number).padStart(4, "0")}</p>
+          <p style={{ color: "#9ca3af", fontSize: 14, marginTop: 4 }}>PHENO-{String(tag.pheno_number).padStart(4, "0")}</p>
         )}
         {overallRating > 0 && (
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#38383A]">
-            <span className="text-sm text-gray-400">Your Overall Rating</span>
-            <div className="flex space-x-0.5">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 12, paddingTop: 12, borderTop: "1px solid #38383A" }}>
+            <span style={{ fontSize: 14, color: "#9ca3af" }}>Your Overall Rating</span>
+            <div style={{ display: "flex", gap: 2 }}>
               {[1, 2, 3, 4, 5].map((star) => (
-                <span key={star} className="text-sm" style={{ color: star <= overallRating ? "#00A699" : "rgba(255,255,255,0.2)" }}>★</span>
+                <span key={star} style={{ fontSize: 14, color: star <= overallRating ? TEAL : "rgba(255,255,255,0.2)" }}>★</span>
               ))}
             </div>
           </div>
@@ -175,48 +213,47 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
       </div>
 
       {/* Ratings Card */}
-      <div className="bg-[#1C1C1E] rounded-xl border border-[#38383A] shadow-sm overflow-hidden">
+      <div style={cardStyle}>
         {/* Terpene Profile Button */}
         <button
           type="button"
           onClick={() => setShowTerpeneSheet(true)}
-          className="w-full px-4 py-3 flex items-center justify-between hover:bg-[#2C2C2E] transition-colors"
+          style={{ width: "100%", padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "transparent", border: "none", cursor: "pointer" }}
         >
-          <span className="font-semibold text-white">Terpene Profile</span>
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-400">{getTerpSummary()}</span>
-            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+          <span style={{ fontWeight: 600, color: "#fff" }}>Terpene Profile</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 14, color: "#9ca3af" }}>{getTerpSummary()}</span>
+            <span style={{ color: "#9ca3af" }}>›</span>
           </div>
         </button>
-        <div className="border-t border-[#38383A] ml-4" />
+        <div style={dividerStyle} />
         
         {/* Color Picker */}
-        <div className="px-4">
+        <div style={{ padding: "0 16px" }}>
           <button
             type="button"
             onClick={() => setShowColorPicker(!showColorPicker)}
-            className="w-full py-3 flex items-center justify-between"
+            style={{ width: "100%", padding: "14px 0", display: "flex", alignItems: "center", justifyContent: "space-between", background: "transparent", border: "none", cursor: "pointer" }}
           >
-            <span className="font-semibold text-white">Color</span>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-400">
+            <span style={{ fontWeight: 600, color: "#fff" }}>Color</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 14, color: "#9ca3af" }}>
                 {selectedColor ? colorOptions.find(c => c.value === selectedColor)?.label : "Set Color"}
               </span>
-              <svg className={`w-4 h-4 text-gray-400 transition-transform ${showColorPicker ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+              <span style={{ color: "#9ca3af", transform: showColorPicker ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▾</span>
             </div>
           </button>
           
           {showColorPicker && (
-            <div className="pb-3 space-y-3">
+            <div style={{ paddingBottom: 12 }}>
               {/* Color Spectrum */}
               <div 
-                className="h-7 rounded-lg cursor-pointer relative"
                 style={{
-                  background: `linear-gradient(to right, ${colorOptions.map(c => c.color).join(', ')})`
+                  height: 28,
+                  borderRadius: 8,
+                  cursor: "pointer",
+                  position: "relative",
+                  background: `linear-gradient(to right, ${colorOptions.map(c => c.color).join(', ')})`,
                 }}
                 onClick={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
@@ -227,24 +264,35 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
                 }}
               >
                 {selectedColor && (
-                  <div 
-                    className="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full shadow-md border border-black/10"
-                    style={{
-                      left: `${(colorOptions.findIndex(c => c.value === selectedColor) / (colorOptions.length - 1)) * 100}%`,
-                      transform: 'translate(-50%, -50%)'
-                    }}
-                  />
+                  <div style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: `${(colorOptions.findIndex(c => c.value === selectedColor) / (colorOptions.length - 1)) * 100}%`,
+                    transform: "translate(-50%, -50%)",
+                    width: 20,
+                    height: 20,
+                    background: "#fff",
+                    borderRadius: "50%",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+                  }} />
                 )}
               </div>
               
               {/* Color Labels */}
-              <div className="flex justify-between">
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
                 {colorOptions.map((color) => (
                   <button
                     key={color.value}
                     type="button"
                     onClick={() => setSelectedColor(color.value)}
-                    className={`text-xs ${selectedColor === color.value ? 'text-white' : 'text-gray-500'}`}
+                    style={{ 
+                      background: "none", 
+                      border: "none", 
+                      fontSize: 10, 
+                      color: selectedColor === color.value ? "#fff" : "#6b7280",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
                   >
                     {color.label.split(' ')[0]}
                   </button>
@@ -254,97 +302,133 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
           )}
           
           {/* Color Rating Stars */}
-          <div className="flex justify-end pb-3">
-            <StarRating 
-              value={colorRating} 
-              onChange={setColorRating} 
-              label="" 
-              starColor={selectedColor ? colorOptions.find(c => c.value === selectedColor)?.color : "#00A699"}
-            />
+          <div style={{ display: "flex", justifyContent: "flex-end", paddingBottom: 8 }}>
+            <div style={{ display: "flex", gap: 4 }}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setColorRating(star)}
+                  style={{ 
+                    background: "none", 
+                    border: "none", 
+                    fontSize: 20, 
+                    cursor: "pointer",
+                    color: star <= colorRating ? (selectedColor ? colorOptions.find(c => c.value === selectedColor)?.color : TEAL) : "rgba(255,255,255,0.2)",
+                    padding: 0,
+                  }}
+                >
+                  ★
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-        <div className="border-t border-[#38383A] ml-4" />
+        <div style={dividerStyle} />
         
-        <div className="px-4">
-          <StarRating value={noseRating} onChange={setNoseRating} label="Nose" />
-        </div>
-        <div className="border-t border-[#38383A] ml-4" />
-        <div className="px-4">
-          <StarRating value={bagAppealRating} onChange={setBagAppealRating} label="Bag Appeal" />
-        </div>
-        <div className="border-t border-[#38383A] ml-4" />
-        <div className="px-4">
-          <StarRating value={smoothnessRating} onChange={setSmoothnessRating} label="Smoothness" />
-        </div>
-        <div className="border-t border-[#38383A] ml-4" />
-        <div className="px-4">
-          <StarRating value={potencyRating} onChange={setPotencyRating} label="Potency" />
-        </div>
-        <div className="border-t border-[#38383A] ml-4" />
-        <div className="px-4">
-          <StarRating value={flavorRating} onChange={setFlavorRating} label="Flavor" />
-        </div>
-        <div className="border-t border-[#38383A] ml-4" />
-        <div className="px-4">
-          <StarRating value={effectsRating} onChange={setEffectsRating} label="Effects" />
-        </div>
-        <div className="border-t border-[#38383A] ml-4" />
-        <div className="px-4">
-          <StarRating value={overallRating} onChange={setOverallRating} label="Overall" />
-        </div>
+        <div style={{ padding: "0 16px" }}><StarRating value={noseRating} onChange={setNoseRating} label="Nose" /></div>
+        <div style={dividerStyle} />
+        <div style={{ padding: "0 16px" }}><StarRating value={bagAppealRating} onChange={setBagAppealRating} label="Bag Appeal" /></div>
+        <div style={dividerStyle} />
+        <div style={{ padding: "0 16px" }}><StarRating value={smoothnessRating} onChange={setSmoothnessRating} label="Smoothness" /></div>
+        <div style={dividerStyle} />
+        <div style={{ padding: "0 16px" }}><StarRating value={potencyRating} onChange={setPotencyRating} label="Potency" /></div>
+        <div style={dividerStyle} />
+        <div style={{ padding: "0 16px" }}><StarRating value={flavorRating} onChange={setFlavorRating} label="Flavor" /></div>
+        <div style={dividerStyle} />
+        <div style={{ padding: "0 16px" }}><StarRating value={effectsRating} onChange={setEffectsRating} label="Effects" /></div>
+        <div style={dividerStyle} />
+        <div style={{ padding: "0 16px" }}><StarRating value={overallRating} onChange={setOverallRating} label="Overall" /></div>
       </div>
 
       {/* Review Section */}
-      <div className="bg-[#1C1C1E] rounded-xl border border-[#38383A] shadow-sm overflow-hidden">
-        <div className="px-4 py-2 border-b border-[#38383A]">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Flower Review</span>
+      <div style={cardStyle}>
+        <div style={{ padding: "8px 16px", borderBottom: "1px solid #38383A" }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", letterSpacing: 0.5 }}>Flower Review</span>
         </div>
         <textarea
           value={reviewNotes}
           onChange={(e) => setReviewNotes(e.target.value)}
           placeholder="Share your thoughts..."
-          rows={4}
-          className="w-full px-4 py-3 bg-transparent text-white placeholder-gray-500 resize-none focus:outline-none"
+          style={{
+            width: "100%",
+            padding: 16,
+            background: "transparent",
+            border: "none",
+            color: "#fff",
+            fontSize: 16,
+            resize: "none",
+            minHeight: 100,
+            outline: "none",
+          }}
         />
       </div>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3">
-          <p className="text-red-400 text-sm text-center">{error}</p>
+        <div style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 12, padding: 12, marginBottom: 16 }}>
+          <p style={{ color: "#f87171", fontSize: 14, textAlign: "center", margin: 0 }}>{error}</p>
         </div>
       )}
 
       <button
         type="submit"
         disabled={isSaving}
-        className="w-full bg-[#00A699] hover:bg-[#008F84] disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
+        style={{
+          width: "100%",
+          padding: 14,
+          background: TEAL,
+          border: "none",
+          borderRadius: 12,
+          color: "#fff",
+          fontSize: 17,
+          fontWeight: 600,
+          cursor: isSaving ? "not-allowed" : "pointer",
+          opacity: isSaving ? 0.6 : 1,
+        }}
       >
         {isSaving ? "Saving..." : existingFeedback ? "Update Feedback" : "Submit Feedback"}
       </button>
 
-      {/* Terpene Profile Sheet (Modal) */}
+      {/* Terpene Profile Modal */}
       {showTerpeneSheet && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-end sm:items-center justify-center">
-          <div className="bg-[#1C1C1E] w-full max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,0.8)",
+          zIndex: 50,
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "center",
+        }}>
+          <div style={{
+            background: "#1C1C1E",
+            width: "100%",
+            maxWidth: 500,
+            borderRadius: "16px 16px 0 0",
+            maxHeight: "90vh",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+          }}>
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[#38383A]">
-              <h3 className="font-semibold text-white">Terpene Profile</h3>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", borderBottom: "1px solid #38383A" }}>
+              <h3 style={{ fontWeight: 600, color: "#fff", margin: 0 }}>Terpene Profile</h3>
               <button
                 type="button"
                 onClick={() => setShowTerpeneSheet(false)}
-                className="text-[#00A699] font-semibold"
+                style={{ background: "none", border: "none", color: TEAL, fontWeight: 600, fontSize: 16, cursor: "pointer" }}
               >
                 Done
               </button>
             </div>
             
             {/* Content */}
-            <div className="overflow-y-auto flex-1 p-4 space-y-6">
+            <div style={{ overflowY: "auto", flex: 1, padding: 16 }}>
               {/* Nose Intensity */}
-              <div>
-                <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Nose Intensity</h4>
-                <div className="flex items-center space-x-3">
-                  <span className="text-white w-20">Strength</span>
+              <div style={{ marginBottom: 24 }}>
+                <h4 style={{ fontSize: 12, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", marginBottom: 12 }}>Nose Intensity</h4>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span style={{ color: "#fff", width: 80 }}>Strength</span>
                   <input
                     type="range"
                     min="0"
@@ -352,21 +436,21 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
                     step="5"
                     value={overallStrength}
                     onChange={(e) => setOverallStrength(parseInt(e.target.value))}
-                    className="flex-1 accent-[#00A699]"
+                    style={{ flex: 1, accentColor: TEAL }}
                   />
-                  <span className="text-gray-400 w-12 text-right">{overallStrength}%</span>
+                  <span style={{ color: "#9ca3af", width: 48, textAlign: "right" }}>{overallStrength}%</span>
                 </div>
               </div>
               
               {/* Terpene Sliders */}
               <div>
-                <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Terpene Profile</h4>
-                <p className="text-xs text-gray-500 mb-3">Distribute up to 100% across notes</p>
+                <h4 style={{ fontSize: 12, fontWeight: 600, color: "#9ca3af", textTransform: "uppercase", marginBottom: 4 }}>Terpene Profile</h4>
+                <p style={{ fontSize: 12, color: "#6b7280", marginBottom: 12 }}>Distribute up to 100% across notes</p>
                 
-                <div className="space-y-2">
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {terpeneNames.map((name) => (
-                    <div key={name} className="flex items-center space-x-3">
-                      <span className="text-white w-20 text-sm">{name}</span>
+                    <div key={name} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <span style={{ color: "#fff", width: 80, fontSize: 14 }}>{name}</span>
                       <input
                         type="range"
                         min="0"
@@ -374,17 +458,17 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
                         step="5"
                         value={terpeneValues[name] || 0}
                         onChange={(e) => handleTerpeneChange(name, parseInt(e.target.value))}
-                        className="flex-1 accent-[#00A699]"
+                        style={{ flex: 1, accentColor: TEAL }}
                       />
-                      <span className="text-gray-400 w-12 text-right text-sm">{terpeneValues[name] || 0}%</span>
+                      <span style={{ color: "#9ca3af", width: 48, textAlign: "right", fontSize: 14 }}>{terpeneValues[name] || 0}%</span>
                     </div>
                   ))}
                 </div>
                 
                 {/* Remaining */}
-                <div className="flex justify-between mt-3 text-xs">
-                  <span className="text-gray-500">Remaining</span>
-                  <span className="text-gray-400">
+                <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12, fontSize: 12 }}>
+                  <span style={{ color: "#6b7280" }}>Remaining</span>
+                  <span style={{ color: "#9ca3af" }}>
                     {Math.max(0, 100 - Object.values(terpeneValues).reduce((a, b) => a + b, 0))}%
                   </span>
                 </div>
