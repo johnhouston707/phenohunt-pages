@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
@@ -21,9 +21,10 @@ const styles = `
   .link { color: #00A699; text-decoration: none; }
   .link:hover { text-decoration: underline; }
   p { margin-top: 24px; color: #9ca3af; }
+  .loading { display: flex; align-items: center; justify-content: center; min-height: 100vh; color: #9ca3af; }
 `;
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
@@ -55,25 +56,32 @@ export default function SignupPage() {
   };
 
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: styles }} />
-      <div className="container">
-        <h1>Create Account</h1>
-        <form onSubmit={handleSubmit}>
-          <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)}
-            placeholder="Display Name" required />
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email" required />
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password (min 6 characters)" required minLength={6} />
-          {error && <div className="error">{error}</div>}
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? "Creating..." : "Create Account"}
-          </button>
-        </form>
-        <p>Already have an account? <a href={`/login?redirect=${encodeURIComponent(redirectTo)}`} className="link">Sign In</a></p>
-      </div>
-    </>
+    <div className="container">
+      <h1>Create Account</h1>
+      <form onSubmit={handleSubmit}>
+        <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)}
+          placeholder="Display Name" required />
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email" required />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password (min 6 characters)" required minLength={6} />
+        {error && <div className="error">{error}</div>}
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Creating..." : "Create Account"}
+        </button>
+      </form>
+      <p>Already have an account? <a href={`/login?redirect=${encodeURIComponent(redirectTo)}`} className="link">Sign In</a></p>
+    </div>
   );
 }
 
+export default function SignupPage() {
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: styles }} />
+      <Suspense fallback={<div className="loading">Loading...</div>}>
+        <SignupForm />
+      </Suspense>
+    </>
+  );
+}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
@@ -21,9 +21,10 @@ const styles = `
   .link { color: #00A699; text-decoration: none; }
   .link:hover { text-decoration: underline; }
   p { margin-top: 24px; color: #9ca3af; }
+  .loading { display: flex; align-items: center; justify-content: center; min-height: 100vh; color: #9ca3af; }
 `;
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
@@ -50,23 +51,30 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: styles }} />
-      <div className="container">
-        <h1>Sign In</h1>
-        <form onSubmit={handleSubmit}>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email" required />
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password" required />
-          {error && <div className="error">{error}</div>}
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? "Signing in..." : "Sign In"}
-          </button>
-        </form>
-        <p>Don&apos;t have an account? <a href={`/signup?redirect=${encodeURIComponent(redirectTo)}`} className="link">Sign Up</a></p>
-      </div>
-    </>
+    <div className="container">
+      <h1>Sign In</h1>
+      <form onSubmit={handleSubmit}>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email" required />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password" required />
+        {error && <div className="error">{error}</div>}
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Signing in..." : "Sign In"}
+        </button>
+      </form>
+      <p>Don&apos;t have an account? <a href={`/signup?redirect=${encodeURIComponent(redirectTo)}`} className="link">Sign Up</a></p>
+    </div>
   );
 }
 
+export default function LoginPage() {
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: styles }} />
+      <Suspense fallback={<div className="loading">Loading...</div>}>
+        <LoginForm />
+      </Suspense>
+    </>
+  );
+}
