@@ -196,9 +196,25 @@ export default function TesterFeedbackForm({ tag, existingFeedback, userId, disp
     <form onSubmit={handleSubmit}>
       {/* Summary Card */}
       <div style={{ ...cardStyle, padding: 16 }}>
-        <h2 style={{ fontWeight: 700, fontSize: 18, color: "#fff", margin: 0 }}>{tag.strain_name || "Unknown Strain"}</h2>
+        {/* Profile Photo */}
+        {tag.profile_photo_url && (
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+            <img
+              src={tag.profile_photo_url}
+              alt="Pheno"
+              style={{
+                width: 120,
+                height: 120,
+                borderRadius: "50%",
+                objectFit: "cover",
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}
+            />
+          </div>
+        )}
+        <h2 style={{ fontWeight: 700, fontSize: 18, color: "#fff", margin: 0, textAlign: tag.profile_photo_url ? "center" : "left" }}>{tag.strain_name || "Unknown Strain"}</h2>
         {tag.pheno_number && (
-          <p style={{ color: "#9ca3af", fontSize: 14, marginTop: 4 }}>PHENO-{String(tag.pheno_number).padStart(4, "0")}</p>
+          <p style={{ color: "#9ca3af", fontSize: 14, marginTop: 4, textAlign: tag.profile_photo_url ? "center" : "left" }}>PHENO-{String(tag.pheno_number).padStart(4, "0")}</p>
         )}
         {overallRating > 0 && (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 12, paddingTop: 12, borderTop: "1px solid #38383A" }}>

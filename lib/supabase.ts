@@ -34,6 +34,7 @@ export interface TesterTag {
   code: string;
   strain_name: string | null;
   pheno_number: number | null;
+  profile_photo_url: string | null;
   created_at: string;
 }
 
