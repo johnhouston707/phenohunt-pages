@@ -16,7 +16,8 @@ function ProfilePhoto({ ownerId, phenoId }: { ownerId: string; phenoId: string }
   const [error, setError] = useState(false);
   
   // Construct URL from owner_id and pheno_id
-  const photoUrl = `https://data.phenohunt.com/storage/v1/object/public/phenohunt-photos/PhenoProfilePhotos/${ownerId}/${phenoId}/ProfilePic/profile.jpg`;
+  // Photos are stored in pheno-photos bucket with uppercase UUIDs
+  const photoUrl = `https://data.phenohunt.com/storage/v1/object/public/pheno-photos/${ownerId.toUpperCase()}/${phenoId.toUpperCase()}/ProfilePic/profile.jpg`;
   
   // Don't render anything if there was an error loading or still loading
   if (error || !loaded) {
