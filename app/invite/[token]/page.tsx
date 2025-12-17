@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import AppDownloadBanner from "@/components/AppDownloadBanner";
 
 const APP_STORE_URL = "https://apps.apple.com/us/app/phenohunt/id6754624180";
 
@@ -27,18 +26,13 @@ const styles = `
     text-align: center; 
   }
   .logo-container {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
   .logo-icon {
     width: 96px;
     height: 96px;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     border-radius: 24px;
-    margin: 0 auto 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
+    margin: 0 auto;
   }
   h1 { 
     font-size: 28px; 
@@ -67,9 +61,9 @@ const styles = `
     font-size: 14px;
   }
   .button-primary {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: #000;
     color: #fff;
-    border: none;
+    border: 1px solid #fff;
     padding: 16px 32px;
     border-radius: 12px;
     font-size: 16px;
@@ -89,89 +83,58 @@ const styles = `
     transform: scale(0.98);
     opacity: 0.9;
   }
+  .button-secondary {
+    background: transparent;
+    color: #9ca3af;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    max-width: 280px;
+    margin-bottom: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .button-secondary:hover {
+    transform: scale(1.02);
+    border-color: rgba(255,255,255,0.4);
+  }
   .open-app-text {
     color: #6b7280;
     font-size: 14px;
-  }
-  .loading { 
-    text-align: center; 
-    padding: 48px; 
-    color: #9ca3af; 
-  }
-  .spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid rgba(255,255,255,0.1);
-    border-top-color: #10b981;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 16px;
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
+    margin-top: 24px;
   }
 `;
 
 export default function InvitePage() {
   const params = useParams();
   const inviteToken = params.token as string;
-  const [isLoading, setIsLoading] = useState(true);
   const [isOnIOS, setIsOnIOS] = useState(false);
 
   useEffect(() => {
-    const onIOS = isIOS();
-    setIsOnIOS(onIOS);
-    
-    if (onIOS) {
-      // Try to open the app with the invite URL
-      const appUrl = `phenohunt://invite/${inviteToken}`;
-      
-      // Set a timeout to redirect to App Store if app doesn't open
-      const timeout = setTimeout(() => {
-        window.location.href = APP_STORE_URL;
-      }, 1500);
-      
-      // Try to open the app
-      window.location.href = appUrl;
-      
-      // If the page is still visible after a short delay, the app didn't open
-      const visibilityHandler = () => {
-        if (document.hidden) {
-          // App opened, clear the timeout
-          clearTimeout(timeout);
-        }
-      };
-      
-      document.addEventListener("visibilitychange", visibilityHandler);
-      
-      return () => {
-        clearTimeout(timeout);
-        document.removeEventListener("visibilitychange", visibilityHandler);
-      };
-    } else {
-      // Not on iOS, show the download page
-      setIsLoading(false);
-    }
-  }, [inviteToken]);
+    setIsOnIOS(isIOS());
+  }, []);
 
-  if (isLoading && isOnIOS) {
-    return (
-      <>
-        <style dangerouslySetInnerHTML={{ __html: styles }} />
-        <div className="container">
-          <div className="spinner"></div>
-          <p style={{ color: '#9ca3af' }}>Opening Phenohunt...</p>
-        </div>
-      </>
-    );
-  }
+  // The Universal Link URL - this is what should open in the app
+  const universalLink = `https://app.phenohunt.com/invite/${inviteToken}`;
+  
+  // Custom URL scheme as fallback
+  const customSchemeUrl = `phenohunt://invite/${inviteToken}`;
 
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: styles }} />
       <div className="container">
         <div className="logo-container">
-          <div className="logo-icon">🌱</div>
+          <img 
+            src="https://app.phenohunt.com/app-icon.png" 
+            alt="Phenohunt" 
+            className="logo-icon"
+          />
         </div>
         
         <h1>You&apos;ve been invited!</h1>
@@ -179,7 +142,7 @@ export default function InvitePage() {
         
         <div className="invite-box">
           <p className="invite-text">
-            Open this link in the Phenohunt app to accept the invitation.
+            Tap the button below to accept this invitation in the Phenohunt app.
           </p>
           <p className="invite-subtext">
             You&apos;ll need a Phenohunt account to collaborate.
@@ -188,18 +151,13 @@ export default function InvitePage() {
         
         {isOnIOS ? (
           <>
-            <a href={APP_STORE_URL} className="button-primary">
-              Get Phenohunt on the App Store
+            <a href={customSchemeUrl} className="button-primary">
+              Open in Phenohunt
             </a>
-            <p className="open-app-text">
-              Already have Phenohunt?{" "}
-              <a 
-                href={`phenohunt://invite/${inviteToken}`} 
-                style={{ color: '#10b981', textDecoration: 'none' }}
-              >
-                Open in app
-              </a>
-            </p>
+            <br />
+            <a href={APP_STORE_URL} className="button-secondary">
+              Get the App
+            </a>
           </>
         ) : (
           <>
@@ -212,9 +170,6 @@ export default function InvitePage() {
           </>
         )}
       </div>
-      
-      <AppDownloadBanner />
     </>
   );
 }
-
